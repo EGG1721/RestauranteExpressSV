@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colores de comida Salvadoreña -->
+    <color name="colorPrimary">#B71C1C</color>
+    <color name="colorPrimaryDark">#7F0000</color>
+    <color name="colorSecondary">#FF9800</color>
+    <color name="colorBackground">#FFF8E1</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorText">#212121</color>
+    <color name="colorGray">#757575</color>
+    <!-- Modo oscuro -->
+    <color name="colorDarkBackground">#121212</color>
+    <color name="colorDarkSurface">#1E1E1E</color>
+
+</resources>
