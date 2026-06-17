@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dashboard"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Tarjeta: Total Clientes -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+                <TextView android:text="👥" android:textSize="32sp"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp" />
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_height="wrap_content" android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView android:text="Clientes registrados"
+                        android:textSize="14sp" android:textColor="@color/colorGray"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/tvTotalClientes"
+                        android:text="0" android:textSize="28sp" android:textStyle="bold"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+                <TextView android:text="👥" android:textSize="32sp"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp" />
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_height="wrap_content" android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView android:text="Total Pedidos"
+                        android:textSize="14sp" android:textColor="@color/colorGray"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/tvTotalPedidos"
+                        android:text="0" android:textSize="28sp" android:textStyle="bold"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+                <TextView android:text="👥" android:textSize="32sp"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp" />
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_height="wrap_content" android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView android:text="Pendientes "
+                        android:textSize="14sp" android:textColor="@color/colorGray"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/tvPendientes"
+                        android:text="0" android:textSize="28sp" android:textStyle="bold"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+                <TextView android:text="👥" android:textSize="32sp"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp" />
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_height="wrap_content" android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView android:text="Total Vendido"
+                        android:textSize="14sp" android:textColor="@color/colorGray"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                    <TextView android:id="@+id/tvTotalVendido"
+                        android:text="0" android:textSize="28sp" android:textStyle="bold"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Repite la misma estructura CardView para: -->
+        <!-- tvTotalPedidos (📋), tvPendientes (⏳), tvTotalVendido (💰) -->
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Restaurante Express SV"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.RestauranteExpressSV">
+
+        <!-- LoginActivity es el punto de entrada de la app -->
+        <activity
+            android:name=".activities.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Registro de usuario -->
+        <activity android:name=".activities.RegistroActivity"
+            android:exported="false" />
+
+        <!-- Pantalla principal con Fragments -->
+        <activity android:name=".activities.MainActivity"
+            android:exported="false" />
+
+    </application>
+
+</manifest>
