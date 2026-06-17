@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.restauranteexpresssv.R;
+import com.example.restauranteexpresssv.fragments.ConfiguracionFragment;
 import com.example.restauranteexpresssv.fragments.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
         bottomNav.setOnItemSelectedListener(item -> {
-            Fragment fragment;
+            Fragment fragment = null;
             int id = item.getItemId();
             if(id == R.id.navInicio)     fragment = new HomeFragment();
             else if (id == R.id.navClientes) fragment = new ConfiguracionFragment();

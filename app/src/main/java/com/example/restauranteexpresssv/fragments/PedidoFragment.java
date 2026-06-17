@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restauranteexpresssv.R;
+import com.example.restauranteexpresssv.adapters.PedidoAdapter;
 import com.example.restauranteexpresssv.database.AppDatabase;
 import com.example.restauranteexpresssv.entities.Cliente;
 import com.example.restauranteexpresssv.entities.Pedido;

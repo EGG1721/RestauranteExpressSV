@@ -29,5 +29,8 @@ public interface ClienteDao {
     @Query("SELECT COUNT(*) FROM clientes")
     int contarClientes();
 
+    @Query("SELECT * FROM clientes ORDER BY nombre ASC")
+    List<Cliente> obtenerTodos();
+
 
 }

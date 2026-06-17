@@ -28,7 +28,7 @@ public class HomeFragment extends Fragment {
         ((TextView) view.findViewById(R.id.tvTotalClientes)).setText(String.valueOf(totalClientes));
         ((TextView) view.findViewById(R.id.tvTotalPedidos)).setText(String.valueOf(totalPedidos));
         ((TextView) view.findViewById(R.id.tvPendientes)).setText(String.valueOf(pendientes));
-        ((TextView) view.findViewById(R.id.tvTotalVendido)).setText(String.format(("$%.2f", vendido));
+        ((TextView) view.findViewById(R.id.tvTotalVendido)).setText(String.format("$%.2f", vendido));
 
         return view;
 
