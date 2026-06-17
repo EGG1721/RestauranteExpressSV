@@ -13,33 +13,30 @@ import com.example.restauranteexpresssv.entities.Cliente;
 import com.example.restauranteexpresssv.entities.Pedido;
 import com.example.restauranteexpresssv.entities.Usuario;
 
-@Database(entities = {Usuario.class, Cliente.class, Pedido.class }, version = 1)
+@Database(entities = {Usuario.class, Cliente.class, Pedido.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
-    //Metodos abstractos que implementa Room de forma automatica
     public abstract UsuarioDao usuarioDao();
     public abstract PedidoDao pedidoDao();
     public abstract ClienteDao clienteDao();
 
-    //Singlenton para garantizar que solo exista una instancia de la BD
     private static volatile AppDatabase INSTANCE;
 
-    public static AppDatabase getInstance(Context context){
-        if(INSTANCE == null) {
+    public static AppDatabase getInstance(Context context) {
+        if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
-                if(INSTANCE == null){
+                if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(
-                            context.getApplicationContext(),
-                            AppDatabase.class,
-                            "restaurante_express_db"
-                    )
+                                    context.getApplicationContext(),
+                                    AppDatabase.class,
+                                    "restaurante_express_db"
+                            )
+                            .fallbackToDestructiveMigration()
                             .allowMainThreadQueries()
                             .build();
-
                 }
             }
         }
         return INSTANCE;
     }
-
 }

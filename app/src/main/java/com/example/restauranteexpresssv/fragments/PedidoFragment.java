@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import com.example.restauranteexpresssv.entities.Cliente;
 import com.example.restauranteexpresssv.entities.Pedido;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,6 +36,20 @@ public class PedidoFragment extends Fragment {
     private AppDatabase db;
     private PedidoAdapter adapter;
     private List<Pedido> listaPedidos;
+
+    private static class ProductoPedido {
+        String nombre;
+        int cantidad;
+        double precioUnitario;
+        double subtotal;
+
+        ProductoPedido(String nombre, int cantidad, double precioUnitario) {
+            this.nombre = nombre;
+            this.cantidad = cantidad;
+            this.precioUnitario = precioUnitario;
+            this.subtotal = cantidad * precioUnitario;
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,14 +71,14 @@ public class PedidoFragment extends Fragment {
         return view;
     }
 
-    //Dialogo para agregar un pedido nuevo
+    // Diálogo para agregar un pedido nuevo con varios productos.
     private void mostrarDialogoAgregarPedido() {
-        //Regla del Negocio, debe existir al menos un cliente
+        // Regla del negocio: debe existir al menos un cliente.
         List<Cliente> clientes = db.clienteDao().obtenerTodos();
         if (clientes.isEmpty()) {
             new AlertDialog.Builder(getContext())
-                    .setTitle("Sin Clientes")
-                    .setMessage("Debe Registrar un cliente antes de agregar un pedido")
+                    .setTitle("Sin clientes")
+                    .setMessage("Debe registrar un cliente antes de agregar un pedido.")
                     .setPositiveButton("Entendido", null)
                     .show();
             return;
@@ -71,131 +87,247 @@ public class PedidoFragment extends Fragment {
         View dialogView = LayoutInflater.from(getContext())
                 .inflate(R.layout.dialog_pedido, null);
 
-        //Spinner de clientes
         Spinner spinnerCliente = dialogView.findViewById(R.id.spinnerCliente);
         List<String> nombresClientes = new ArrayList<>();
         for (Cliente c : clientes) nombresClientes.add(c.getNombre());
-        spinnerCliente.setAdapter(new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, nombresClientes));
+        ArrayAdapter<String> clienteAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_spinner_item, nombresClientes);
+        clienteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCliente.setAdapter(clienteAdapter);
 
-        //Spinner de Producto
         Spinner spinnerProducto = dialogView.findViewById(R.id.spinnerProducto);
         String[] productos = {
-                "Pupusas Revueltas", "Pupusa de Quedso",
+                "Pupusas Revueltas", "Pupusa de Queso",
                 "Pupusas de Frijol con Queso", "Yuca Frita",
                 "Empanadas", "Pastelitos", "Sopa de Gallina",
-                "Desayuno Tipico", "Cafe", "Chocolate"
+                "Desayuno Típico", "Café", "Chocolate"
         };
-        spinnerProducto.setAdapter(new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, productos));
+        ArrayAdapter<String> productoAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_spinner_item, productos);
+        productoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerProducto.setAdapter(productoAdapter);
 
-        //Spinner de Modalidad
         Spinner spinnerModalidad = dialogView.findViewById(R.id.spinnerModalidad);
-        String[] modalidades = {"Comer en Local", "Para Llevar", "Delivery"};
-        spinnerModalidad.setAdapter(new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, modalidades));
+        String[] modalidades = {"Comer en local", "Para llevar", "Delivery"};
+        ArrayAdapter<String> modalidadAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_spinner_item, modalidades);
+        modalidadAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerModalidad.setAdapter(modalidadAdapter);
 
-        //Spinner de Estado
         Spinner spinnerEstado = dialogView.findViewById(R.id.spinnerEstado);
-        String[] estados = {"Pendiente", "En Preparacion", "Entregado", "Cancelado"};
-        spinnerEstado.setAdapter(new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, estados));
+        String[] estados = {"Pendiente", "En proceso", "Entregado", "Cancelado"};
+        ArrayAdapter<String> estadoAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_spinner_item, estados);
+        estadoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerEstado.setAdapter(estadoAdapter);
 
-        //Calculo Automatico del Total
         EditText etCantidad = dialogView.findViewById(R.id.etCantidad);
         EditText etPrecio = dialogView.findViewById(R.id.etPrecio);
         TextView tvTotal = dialogView.findViewById(R.id.tvTotal);
+        TextView tvProductosAgregados = dialogView.findViewById(R.id.tvProductosAgregados);
+        Button btnAgregarProducto = dialogView.findViewById(R.id.btnAgregarProducto);
 
-        TextWatcher calcularTotal = new TextWatcher() {
+        List<ProductoPedido> productosAgregados = new ArrayList<>();
+
+        TextWatcher calcularTotalTemporal = new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                try {
-                    int cant = Integer.parseInt(etCantidad.getText().toString());
-                    double precio = Double.parseDouble(etPrecio.getText().toString());
-                    tvTotal.setText(String.format("Total: $%.2f", cant * precio));
-                } catch (NumberFormatException e) {
-                    tvTotal.setText("Total : $ 0.00 ");
-                }
+                actualizarVistaProductos(productosAgregados, tvProductosAgregados, tvTotal,
+                        etCantidad, etPrecio);
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int i, int c, int a) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
-            public void onTextChanged(CharSequence s, int i, int b, int c) {
-            }
-
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
         };
-        etCantidad.addTextChangedListener(calcularTotal);
-        etPrecio.addTextChangedListener(calcularTotal);
+        etCantidad.addTextChangedListener(calcularTotalTemporal);
+        etPrecio.addTextChangedListener(calcularTotalTemporal);
 
-        new AlertDialog.Builder(getContext())
-                .setTitle("Nuevo Pedido")
+        btnAgregarProducto.setOnClickListener(v -> agregarProductoAlPedido(
+                productosAgregados, spinnerProducto, etCantidad, etPrecio,
+                tvProductosAgregados, tvTotal));
+
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setTitle("Nuevo pedido")
                 .setView(dialogView)
-                .setPositiveButton("Guardar", (d, w) ->
-                        guardarPedido(dialogView, clientes, spinnerCliente, spinnerProducto, spinnerModalidad, spinnerEstado))
+                .setPositiveButton("Guardar", null)
                 .setNegativeButton("Cancelar", null)
-                .show();
+                .create();
 
+        dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setOnClickListener(v -> {
+                    boolean hayProductoPendiente = !etCantidad.getText().toString().trim().isEmpty()
+                            || !etPrecio.getText().toString().trim().isEmpty();
+
+                    if (hayProductoPendiente) {
+                        boolean agregado = agregarProductoAlPedido(productosAgregados, spinnerProducto,
+                                etCantidad, etPrecio, tvProductosAgregados, tvTotal);
+                        if (!agregado) return;
+                    }
+
+                    if (productosAgregados.isEmpty()) {
+                        Toast.makeText(getContext(), "Agregue al menos un producto al pedido",
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    guardarPedido(dialogView, clientes, spinnerCliente, spinnerModalidad,
+                            spinnerEstado, productosAgregados);
+                    dialog.dismiss();
+                }));
+
+        dialog.show();
     }
 
-    private void guardarPedido(View dialogView, List<Cliente> clientes,
-                               Spinner spinnerCliente, Spinner spinnerProducto,
-                               Spinner spinnerModalidad, Spinner spinnerEstado) {
+    private boolean agregarProductoAlPedido(List<ProductoPedido> productosAgregados,
+                                            Spinner spinnerProducto,
+                                            EditText etCantidad,
+                                            EditText etPrecio,
+                                            TextView tvProductosAgregados,
+                                            TextView tvTotal) {
+        String cantidadStr = etCantidad.getText().toString().trim();
+        String precioStr = etPrecio.getText().toString().trim();
 
-        EditText etCantidad = dialogView.findViewById(R.id.etCantidad);
-        EditText etPrecio = dialogView.findViewById(R.id.etPrecio);
-        EditText etObservaciones = dialogView.findViewById(R.id.etObservaciones);
+        if (cantidadStr.isEmpty() || precioStr.isEmpty()) {
+            Toast.makeText(getContext(), "Ingrese cantidad y precio del producto",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        int cantidad;
+        double precio;
+        try {
+            cantidad = Integer.parseInt(cantidadStr);
+            precio = Double.parseDouble(precioStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(getContext(), "Cantidad o precio no válido",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (cantidad <= 0 || precio <= 0) {
+            Toast.makeText(getContext(), "La cantidad y el precio deben ser mayores que cero",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        String producto = spinnerProducto.getSelectedItem().toString();
+        productosAgregados.add(new ProductoPedido(producto, cantidad, precio));
+
+        etCantidad.setText("");
+        etPrecio.setText("");
+        actualizarVistaProductos(productosAgregados, tvProductosAgregados, tvTotal, etCantidad, etPrecio);
+
+        Toast.makeText(getContext(), "Producto agregado al pedido", Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    private void actualizarVistaProductos(List<ProductoPedido> productosAgregados,
+                                          TextView tvProductosAgregados,
+                                          TextView tvTotal,
+                                          EditText etCantidad,
+                                          EditText etPrecio) {
+        double totalPedido = calcularTotalProductos(productosAgregados);
 
         String cantidadStr = etCantidad.getText().toString().trim();
         String precioStr = etPrecio.getText().toString().trim();
 
-        // Validaciones
-        if (cantidadStr.isEmpty() || precioStr.isEmpty()) {
-            Toast.makeText(getContext(), "Cantidad y precio son obligatorios",
-                    Toast.LENGTH_SHORT).show();
-            return;
+        if (!cantidadStr.isEmpty() && !precioStr.isEmpty()) {
+            try {
+                int cantidadTemporal = Integer.parseInt(cantidadStr);
+                double precioTemporal = Double.parseDouble(precioStr);
+                if (cantidadTemporal > 0 && precioTemporal > 0) {
+                    totalPedido += cantidadTemporal * precioTemporal;
+                }
+            } catch (NumberFormatException ignored) { }
         }
 
+        if (productosAgregados.isEmpty()) {
+            tvProductosAgregados.setText("Aún no hay productos agregados");
+        } else {
+            tvProductosAgregados.setText(construirDetalleProductos(productosAgregados));
+        }
 
-        // Obtener cliente seleccionado
+        tvTotal.setText(String.format(Locale.US, "Total del pedido: $%.2f", totalPedido));
+    }
+
+    private double calcularTotalProductos(List<ProductoPedido> productosAgregados) {
+        double total = 0;
+        for (ProductoPedido item : productosAgregados) {
+            total += item.subtotal;
+        }
+        return total;
+    }
+
+    private int calcularCantidadTotal(List<ProductoPedido> productosAgregados) {
+        int total = 0;
+        for (ProductoPedido item : productosAgregados) {
+            total += item.cantidad;
+        }
+        return total;
+    }
+
+    private String construirDetalleProductos(List<ProductoPedido> productosAgregados) {
+        StringBuilder detalle = new StringBuilder();
+        for (int i = 0; i < productosAgregados.size(); i++) {
+            ProductoPedido item = productosAgregados.get(i);
+            detalle.append(i + 1)
+                    .append(". ")
+                    .append(item.nombre)
+                    .append(" x")
+                    .append(item.cantidad)
+                    .append(" - $")
+                    .append(String.format(Locale.US, "%.2f", item.subtotal));
+
+            if (i < productosAgregados.size() - 1) {
+                detalle.append("\n");
+            }
+        }
+        return detalle.toString();
+    }
+
+    private void guardarPedido(View dialogView, List<Cliente> clientes,
+                               Spinner spinnerCliente,
+                               Spinner spinnerModalidad,
+                               Spinner spinnerEstado,
+                               List<ProductoPedido> productosAgregados) {
+
+        EditText etObservaciones = dialogView.findViewById(R.id.etObservaciones);
+
         int posCliente = spinnerCliente.getSelectedItemPosition();
         Cliente clienteSel = clientes.get(posCliente);
 
-        int cantidad = Integer.parseInt(cantidadStr);
-        double precio = Double.parseDouble(precioStr);
-        double total = cantidad * precio;
-        String producto = spinnerProducto.getSelectedItem().toString();
+        String detalleProductos = construirDetalleProductos(productosAgregados);
+        int cantidadTotal = calcularCantidadTotal(productosAgregados);
+        double totalPedido = calcularTotalProductos(productosAgregados);
         String modalidad = spinnerModalidad.getSelectedItem().toString();
         String estado = spinnerEstado.getSelectedItem().toString();
         String observaciones = etObservaciones.getText().toString().trim();
 
-        // Fecha actual automática
         String fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm",
                 Locale.getDefault()).format(new Date());
 
         Pedido pedido = new Pedido(
                 clienteSel.getId(), clienteSel.getNombre(),
-                producto, cantidad, precio, total,
+                detalleProductos, cantidadTotal, 0, totalPedido,
                 modalidad, estado, fecha, observaciones
         );
 
         db.pedidoDao().insertar(pedido);
         Toast.makeText(getContext(), "Pedido registrado", Toast.LENGTH_SHORT).show();
         recargarLista();
-
     }
 
-    // ─── Diálogo para editar solo el estado del pedido ───────────────────────
+    // Diálogo para editar solo el estado del pedido.
     private void mostrarDialogoEditarEstado(Pedido pedido) {
-        String[] estados = {"Pendiente", "En preparación", "Entregado", "Cancelado"};
+        String[] estados = {"Pendiente", "En proceso", "Entregado", "Cancelado"};
 
-        // Encontrar el índice del estado actual
         int indexActual = 0;
+        String estadoActualNormalizado = normalizarEstado(pedido.getEstado());
         for (int i = 0; i < estados.length; i++) {
-            if (estados[i].equals(pedido.getEstado())) {
+            if (normalizarEstado(estados[i]).equals(estadoActualNormalizado)) {
                 indexActual = i;
                 break;
             }
@@ -214,13 +346,13 @@ public class PedidoFragment extends Fragment {
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
-
     }
-    // ─── REGLA DE NEGOCIO: no eliminar si está En preparación ────────────────
+
+    // Regla de negocio: no eliminar pedidos que están en proceso/preparación.
     private void confirmarEliminarPedido(Pedido pedido) {
-        if (pedido.getEstado().equals("En preparación")) {
+        if (pedidoEstaEnProceso(pedido)) {
             Toast.makeText(getContext(),
-                    "No se puede eliminar un pedido En preparación",
+                    "No se puede eliminar un pedido que está en proceso",
                     Toast.LENGTH_LONG).show();
             return;
         }
@@ -237,7 +369,19 @@ public class PedidoFragment extends Fragment {
                 .show();
     }
 
-    // ─── Recargar lista después de cualquier cambio ───────────────────────────
+    private boolean pedidoEstaEnProceso(Pedido pedido) {
+        String estado = normalizarEstado(pedido.getEstado());
+        return estado.equals("en proceso") || estado.equals("en preparacion");
+    }
+
+    private String normalizarEstado(String estado) {
+        if (estado == null) return "";
+        String texto = estado.trim().toLowerCase(Locale.ROOT);
+        texto = Normalizer.normalize(texto, Normalizer.Form.NFD);
+        texto = texto.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        return texto;
+    }
+
     private void recargarLista() {
         listaPedidos = db.pedidoDao().obtenerTodos();
         adapter.actualizar(listaPedidos);

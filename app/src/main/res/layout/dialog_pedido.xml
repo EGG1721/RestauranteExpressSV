@@ -9,51 +9,108 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <TextView android:text="Cliente" android:textStyle="bold"
-            android:layout_width="wrap_content" android:layout_height="wrap_content" />
-        <Spinner android:id="@+id/spinnerCliente"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cliente"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinnerCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="12dp" />
 
-        <TextView android:text="Producto" android:textStyle="bold"
-            android:layout_width="wrap_content" android:layout_height="wrap_content" />
-        <Spinner android:id="@+id/spinnerProducto"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar producto al pedido"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinnerProducto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="12dp" />
 
-        <EditText android:id="@+id/etCantidad"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:hint="Cantidad" android:inputType="number"
+        <EditText
+            android:id="@+id/etCantidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cantidad"
+            android:inputType="number"
             android:layout_marginBottom="8dp" />
 
-        <EditText android:id="@+id/etPrecio"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:hint="Precio unitario ($)" android:inputType="numberDecimal"
+        <EditText
+            android:id="@+id/etPrecio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Precio unitario ($)"
+            android:inputType="numberDecimal"
             android:layout_marginBottom="8dp" />
 
-        <!-- Total calculado automáticamente -->
-        <TextView android:id="@+id/tvTotal"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="Total: $0.00" android:textStyle="bold"
-            android:textColor="@color/colorPrimary" android:textSize="16sp"
+        <Button
+            android:id="@+id/btnAgregarProducto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Agregar producto al pedido"
             android:layout_marginBottom="12dp" />
 
-        <TextView android:text="Modalidad" android:textStyle="bold"
-            android:layout_width="wrap_content" android:layout_height="wrap_content" />
-        <Spinner android:id="@+id/spinnerModalidad"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Productos agregados"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvProductosAgregados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aún no hay productos agregados"
+            android:textSize="14sp"
             android:layout_marginBottom="12dp" />
 
-        <TextView android:text="Estado" android:textStyle="bold"
-            android:layout_width="wrap_content" android:layout_height="wrap_content" />
-        <Spinner android:id="@+id/spinnerEstado"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/tvTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total del pedido: $0.00"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
             android:layout_marginBottom="12dp" />
 
-        <EditText android:id="@+id/etObservaciones"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modalidad"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinnerModalidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estado"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinnerEstado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/etObservaciones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="Observaciones (opcional)"
-            android:inputType="textMultiLine" android:lines="3" />
+            android:inputType="textMultiLine"
+            android:lines="3" />
 
     </LinearLayout>
 </ScrollView>

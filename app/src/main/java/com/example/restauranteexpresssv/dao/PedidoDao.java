@@ -1,6 +1,7 @@
 package com.example.restauranteexpresssv.dao;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -17,7 +18,7 @@ public interface PedidoDao {
     @Update
     void actualizar(Pedido pedido);
 
-    @Update
+    @Delete
     void eliminar(Pedido pedido);
 
     //Ordena  todos los pedidos, el mas reciente primero

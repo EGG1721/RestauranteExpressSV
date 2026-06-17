@@ -46,8 +46,7 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
         Pedido pedido = lista.get(position);
 
         holder.tvClienteNombre.setText("👤 " + pedido.getClienteNombre());
-        holder.tvProducto.setText("🍽️ " + pedido.getProducto()
-                + " x" + pedido.getCantidad());
+        holder.tvProducto.setText("🍽️\n" + pedido.getProducto());
         holder.tvTotal.setText(String.format("$%.2f", pedido.getTotal()));
         holder.tvEstado.setText("Estado: " + pedido.getEstado());
 

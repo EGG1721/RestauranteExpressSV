@@ -1,6 +1,5 @@
 package com.example.restauranteexpresssv.activities;
 
-import android.app.AppComponentFactory;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -9,7 +8,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.example.restauranteexpresssv.MainActivity;
 import com.example.restauranteexpresssv.R;
 import com.example.restauranteexpresssv.database.AppDatabase;
 import com.example.restauranteexpresssv.entities.Usuario;
@@ -18,6 +16,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginActivity extends AppCompatActivity {
+
     private TextInputEditText etCorreo, etPassword;
     private AppDatabase db;
     private SessionManager session;
@@ -27,15 +26,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         session = new SessionManager(this);
-        if(session.isDarkMode()) {
-            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_YES
-            );
-        }
-        //Si hay sesion activa ir al main
-        if(session.estaLogueado()) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+
+        AppCompatDelegate.setDefaultNightMode(
+                session.isDarkMode()
+                        ? AppCompatDelegate.MODE_NIGHT_YES
+                        : AppCompatDelegate.MODE_NIGHT_NO
+        );
+
+        // Si hay sesión activa, entrar directo a la pantalla principal correcta
+        if (session.estaLogueado()) {
+            irAlMain();
             return;
         }
 
@@ -49,29 +49,33 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> intentarLogin());
 
         TextView tvRegistrarse = findViewById(R.id.tvRegistrarse);
-        tvRegistrarse.setOnClickListener(v -> startActivity(new Intent(this,RegistroActivity.class)));
+        tvRegistrarse.setOnClickListener(v ->
+                startActivity(new Intent(LoginActivity.this, RegistroActivity.class))
+        );
     }
-    private void intentarLogin(){
-        String correo = etCorreo.getText().toString().trim();
-        String password = etPassword.getText().toString().trim();
 
-        //Validaciones Basicas
-        if(correo.isEmpty() || password.isEmpty()){
-            Toast.makeText(this, "Complete todos los campos",Toast.LENGTH_SHORT).show();
+    private void intentarLogin() {
+        String correo = etCorreo.getText() == null ? "" : etCorreo.getText().toString().trim();
+        String password = etPassword.getText() == null ? "" : etPassword.getText().toString().trim();
+
+        if (correo.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
-        //Consultar en la Base de Datos
+
         Usuario usuario = db.usuarioDao().login(correo, password);
 
-        if(usuario != null) {
-            //Login exitoso, guarda la sesion y continua navegando
+        if (usuario != null) {
             session.guardarSesion(usuario.getId(), usuario.getNombre());
-            startActivity(new Intent(this, MainActivity.class));
-            finish(); //Para evitar ir al login con el boton Atras
+            irAlMain();
         } else {
-            Toast.makeText(this,"Correo o Contraseña Incorrecto", Toast.LENGTH_SHORT).show();
-
+            Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void irAlMain() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
