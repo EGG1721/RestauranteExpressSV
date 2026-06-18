@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -7,30 +8,29 @@
     android:padding="32dp"
     android:background="@color/colorBackground">
 
-
     <!-- Logo / Título -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="🍽️ Restaurante Express SV"
+        android:text="🍽️ Crear cuenta"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimary"
         android:layout_marginBottom="32dp" />
 
+    <!-- Campo nombre -->
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre"
-        app:passwordToggleEnabled="true"
-        android:layout_marginBottom="24dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:hint="Nombre completo"
+        android:layout_marginBottom="16dp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="@color/colorText" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Campo correo -->
@@ -44,9 +44,9 @@
             android:id="@+id/etCorreo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="@color/colorText" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <!-- Campo contraseña -->
     <com.google.android.material.textfield.TextInputLayout
@@ -55,44 +55,45 @@
         android:layout_height="wrap_content"
         android:hint="Contraseña"
         app:passwordToggleEnabled="true"
-        android:layout_marginBottom="24dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:layout_marginBottom="16dp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/colorText" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Campo confirmar contraseña -->
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Contraseña"
+        android:hint="Confirmar contraseña"
         app:passwordToggleEnabled="true"
-        android:layout_marginBottom="24dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:layout_marginBottom="24dp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etConfirmar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/colorText" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Botón login -->
+    <!-- Botón registrar -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegistrar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Iniciar Sesión"
+        android:text="Crear cuenta"
         android:layout_marginBottom="12dp" />
 
-    <!-- Link a registro -->
+    <!-- Link volver al login -->
     <TextView
         android:id="@+id/tvRegistrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="¿No tienes cuenta? Regístrate aquí"
+        android:text="¿Ya tienes cuenta? Inicia sesión"
         android:textColor="@color/colorSecondary"
         android:textSize="14sp" />
 

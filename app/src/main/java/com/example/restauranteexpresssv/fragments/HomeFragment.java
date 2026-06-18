@@ -16,20 +16,27 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        AppDatabase db = AppDatabase.getInstance(requireContext());
+        try {
+            AppDatabase db = AppDatabase.getInstance(requireContext());
 
-        //Obtener Metricas
-        int totalClientes = db.clienteDao().contarClientes();
-        int totalPedidos = db.pedidoDao().contarPedidos();
-        int pendientes = db.pedidoDao().contarPendientes();
-        double vendido = db.pedidoDao().totalVendido();
+            //Obtener Metricas
+            int totalClientes = db.clienteDao().contarClientes();
+            int totalPedidos = db.pedidoDao().contarPedidos();
+            int pendientes = db.pedidoDao().contarPendientes();
+            int entregados = db.pedidoDao().contarEntregados();
+            double vendido = db.pedidoDao().totalVendido();
 
-        //Mostrar en las tarjetas
-        ((TextView) view.findViewById(R.id.tvTotalClientes)).setText(String.valueOf(totalClientes));
-        ((TextView) view.findViewById(R.id.tvTotalPedidos)).setText(String.valueOf(totalPedidos));
-        ((TextView) view.findViewById(R.id.tvPendientes)).setText(String.valueOf(pendientes));
-        ((TextView) view.findViewById(R.id.tvTotalVendido)).setText(String.format("$%.2f", vendido));
+            //Mostrar en las tarjetas
+            ((TextView) view.findViewById(R.id.tvTotalClientes)).setText(String.valueOf(totalClientes));
+            ((TextView) view.findViewById(R.id.tvTotalPedidos)).setText(String.valueOf(totalPedidos));
+            ((TextView) view.findViewById(R.id.tvPendientes)).setText(String.valueOf(pendientes));
+            ((TextView) view.findViewById(R.id.tvEntregados)).setText(String.valueOf(entregados));
+            ((TextView) view.findViewById(R.id.tvTotalVendido)).setText(String.format("$%.2f", vendido));
 
+        } catch (Exception e) {
+            // Esto mostrará el error exacto en Logcat
+            android.util.Log.e("HOME_ERROR", "Error en HomeFragment: " + e.getMessage(), e);
+        }
         return view;
 
     }

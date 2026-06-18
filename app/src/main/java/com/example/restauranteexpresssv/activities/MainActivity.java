@@ -1,15 +1,13 @@
 package com.example.restauranteexpresssv.activities;
 
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
 import com.example.restauranteexpresssv.R;
 import com.example.restauranteexpresssv.fragments.ClientesFragment;
 import com.example.restauranteexpresssv.fragments.ConfiguracionFragment;
 import com.example.restauranteexpresssv.fragments.HomeFragment;
-import com.example.restauranteexpresssv.fragments.PedidoFragment;
+import com.example.restauranteexpresssv.fragments.PedidosFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.navClientes) {
                 fragment = new ClientesFragment();
             } else if (id == R.id.navPedidos) {
-                fragment = new PedidoFragment();
+                fragment = new PedidosFragment();
             } else if (id == R.id.navConfiguracion) {
                 fragment = new ConfiguracionFragment();
             } else {
@@ -41,16 +39,17 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        // Mostrar dashboard al abrir la pantalla principal.
         if (savedInstanceState == null) {
             bottomNav.setSelectedItemId(R.id.navInicio);
         }
     }
 
+    // Metodo cargarFragment
     private void cargarFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, fragment)
                 .commit();
     }
+
 }

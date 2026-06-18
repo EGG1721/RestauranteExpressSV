@@ -33,6 +33,9 @@ public interface PedidoDao {
     @Query("SELECT COUNT(*) FROM pedidos WHERE estado = 'Pendiente'")
     int contarPendientes();
 
+    @Query("SELECT COUNT(*) FROM pedidos WHERE estado = 'Entregado'")
+    int contarEntregados();
+
     //Suma total de lo vendido, solo los pedidos entregados
     @Query("SELECT COALESCE(SUM(total), 0) FROM pedidos WHERE estado = 'Entregado' ")
             double totalVendido();

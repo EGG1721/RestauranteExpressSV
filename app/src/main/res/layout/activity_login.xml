@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
     android:padding="32dp"
     android:background="@color/colorBackground">
-
 
     <!-- Logo / Título -->
     <TextView
@@ -29,7 +29,8 @@
             android:id="@+id/etCorreo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="@color/colorText" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Campo contraseña -->
@@ -39,13 +40,13 @@
         android:layout_height="wrap_content"
         android:hint="Contraseña"
         app:passwordToggleEnabled="true"
-        android:layout_marginBottom="24dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:layout_marginBottom="24dp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/colorText" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Botón login -->

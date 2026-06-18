@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
+    android:padding="48dp"
     android:background="@color/colorBackground">
 
     <!-- Título -->
@@ -40,8 +40,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/colorText" />
 
-            <!-- ⚠️ Este ID debe coincidir exactamente -->
-            <com.google.android.material.switchmaterial.SwitchMaterial
+           <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switchDarkMode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -91,8 +90,7 @@
     </androidx.cardview.widget.CardView>
 
     <!-- Botón cerrar sesión -->
-    <!-- ⚠️ Este ID debe coincidir exactamente -->
-    <com.google.android.material.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCerrarSesion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

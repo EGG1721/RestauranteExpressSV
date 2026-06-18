@@ -1,6 +1,7 @@
 package com.example.restauranteexpresssv.activities;
 
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,9 @@ public class RegistroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
 
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Crear cuenta");
+
         db = AppDatabase.getInstance(this);
 
         etNombre = findViewById(R.id.etNombre);
@@ -30,6 +34,9 @@ public class RegistroActivity extends AppCompatActivity {
 
         MaterialButton btnRegistrar = findViewById(R.id.btnRegistrar);
         btnRegistrar.setOnClickListener( v -> registrar());
+
+        TextView tvLogin = findViewById(R.id.tvRegistrar);
+        tvLogin.setOnClickListener(v -> finish());
 
     }
     private void registrar(){
@@ -57,6 +64,12 @@ public class RegistroActivity extends AppCompatActivity {
         Toast.makeText(this, "Cuenta Creada, ¡Inicie Sesion!", Toast.LENGTH_SHORT).show();
         finish();
 
+    }
+    //metodo para regresar al login
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
 }

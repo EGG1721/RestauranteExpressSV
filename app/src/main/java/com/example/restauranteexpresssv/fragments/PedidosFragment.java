@@ -32,7 +32,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class PedidoFragment extends Fragment {
+public class PedidosFragment extends Fragment {
     private AppDatabase db;
     private PedidoAdapter adapter;
     private List<Pedido> listaPedidos;

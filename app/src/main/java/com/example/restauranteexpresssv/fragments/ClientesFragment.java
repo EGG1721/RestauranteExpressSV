@@ -64,6 +64,8 @@ public class ClientesFragment extends Fragment {
         fab.setOnClickListener(v -> mostrarDialogoAgregar());
         return view;
     }
+
+
     private void filtrar(String texto) {
         listaClientes = db.clienteDao().buscarPorNombre(texto);
         adapter.actualizar(listaClientes);

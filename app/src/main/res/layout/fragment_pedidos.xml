@@ -3,12 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="48dp"
     android:background="@color/colorBackground">
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pedidos"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:layout_margin="16dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPedidos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/tvTitulo"
         android:padding="8dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
